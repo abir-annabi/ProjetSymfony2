@@ -1,0 +1,24 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+app_login:
+    path: /login
+    controller: App\Controller\WebAuthController::login
+
+app_register:
+    path: /register
+    controller: App\Controller\WebAuthController::register
+
+app_logout:
+    path: /logout
+
+api_login:
+    path: /api/login
+    controller: App\Controller\AuthController::login
+    methods: POST
+
+api_register:
+    path: /api/register
+    controller: App\Controller\AuthController::register

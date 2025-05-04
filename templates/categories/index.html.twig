@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CategoriesController!{% endblock %}
+
+{% block body %}
+<h1>Liste des Categories</h1>
+<div class="d-flex justify-content-end">
+
+<a href="#" class="btn btn-primary">Ajouter une nouvelle catégorie</a>
+</div>
+<ul>
+{% for cat in categories %}
+<li>{{cat.libelle}} <a href="">Editer<a/> <a href="">Voir Détail...<a/></li>
+<li>{{cat.libelle}} <a href="{{path("admin_categories_update"),{'id':cat.id})}}">Editer<a/>Modifier<a/></li>
+<li>{{cat.libelle}} <a href="{{path("admin_categories_update"),{'id':cat.id})}}">Editer<a/>Modifier<a/></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

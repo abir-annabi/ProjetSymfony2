@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion | Kteby{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --blanc-creme: #FFF9F5;
+            --beige: #F5E9E0;
+            --taupe: #D8C4B6;
+            --marron: #6D4C41;
+            --noir: #3E2723;
+            --ombre-douce: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        
+        .login-card {
+            background: rgba(255, 249, 245, 0.98);
+            border-radius: 12px;
+            box-shadow: var(--ombre-douce);
+            border: 1px solid var(--taupe);
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        .login-header {
+            background: var(--marron);
+            color: var(--beige);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 3px solid var(--taupe);
+        }
+        
+        .login-body {
+            padding: 2rem;
+        }
+        
+        .form-label {
+            color: var(--noir);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.9) !important;
+            border: 1px solid var(--taupe) !important;
+            border-radius: 6px !important;
+            padding: 0.75rem 1rem !important;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn-login {
+            background: var(--marron) !important;
+            color: white !important;
+            border: none !important;
+            padding: 0.75rem !important;
+            font-weight: 500 !important;
+            width: 100%;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-login:hover {
+            background: var(--noir) !important;
+            transform: translateY(-2px);
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--marron);
+        }
+        
+        .login-footer a {
+            color: var(--marron);
+            font-weight: 500;
+            text-decoration: underline;
+        }
+        
+        .alert-custom {
+            background: rgba(216, 196, 182, 0.3) !important;
+            border: 1px solid var(--taupe) !important;
+            color: var(--noir) !important;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="login-wrapper">
+    <div class="container">
+        <div class="login-card">
+            <div class="login-header">
+                <h2><i class="bi bi-book-half"></i> Connexion à Kteby</h2>
+            </div>
+
+            <div class="login-body">
+                {% for flashError in app.flashes('error') %}
+                    <div class="alert alert-custom alert-dismissible fade show mb-4">
+                        {{ flashError }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+                
+                <form method="post" action="{{ path('app_login') }}">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <div class="mb-3">
+                        <label for="inputEmail" class="form-label">Email</label>
+                        <input type="email" 
+                               value="{{ last_username|default('') }}" 
+                               name="email" 
+                               id="inputEmail" 
+                               class="form-control" 
+                               required 
+                               autofocus>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputPassword" class="form-label">Mot de passe</label>
+                        <div class="input-group">
+                            <input type="password" 
+                                   name="password" 
+                                   id="inputPassword" 
+                                   class="form-control" 
+                                   required>
+                            <button class="btn btn-outline-secondary toggle-password" type="button">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-login">
+                        <i class="bi bi-box-arrow-in-right"></i> Se connecter
+                    </button>
+
+                    <div class="login-footer">
+                        <p>Pas encore inscrit? <a href="{{ path('app_register') }}">Créer un compte</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function() {
+        const input = this.previousElementSibling;
+        const icon = this.querySelector('i');
+        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+        input.setAttribute('type', type);
+        icon.classList.toggle('bi-eye');
+        icon.classList.toggle('bi-eye-slash');
+    });
+});
+</script>
+{% endblock %}

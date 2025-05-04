@@ -1,0 +1,35 @@
+security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: auto
+            cost: 12
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                username_parameter: email  # Correspond au name="email" du formulaire
+                password_parameter: password
+                csrf_token_id: authenticate
+                default_target_path: app_livre_all
+                always_use_default_target_path: true
+                use_referer: false
+                target_path_parameter: redirect_path
+            logout:
+                path: app_logout
+                target: app_login
+
+    access_control:
+        - { path: ^/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/register$, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_USER }

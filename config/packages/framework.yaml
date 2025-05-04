@@ -1,0 +1,20 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+# config/packages/framework.yaml
+framework:
+    csrf_protection:
+        enabled: true
+    session:
+        handler_id: session.handler.native_file
+        save_path: '%kernel.project_dir%/var/sessions/prod'
+        cookie_secure: auto
+        cookie_samesite: lax
+        gc_maxlifetime: 1800
+        gc_probability: 1
+        gc_divisor: 100
+when@test:
+    framework:
+        test: true
+        session:
+            storage_factory_id: session.storage.factory.mock_file
+
+        

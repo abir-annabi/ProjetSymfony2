@@ -1,0 +1,260 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription | Kteby{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --blanc-creme: #FFF9F5;
+            --beige: #F5E9E0;
+            --taupe: #D8C4B6;
+            --marron: #6D4C41;
+            --noir: #3E2723;
+            --ombre-douce: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+       .register-container {
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+        
+
+        
+        .register-header {
+            background: var(--marron);
+            color: var(--beige);
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 3px solid var(--taupe);
+        }
+        
+
+        
+        .form-label {
+            color: var(--noir);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.9) !important;
+            border: 1px solid var(--taupe) !important;
+            border-radius: 6px !important;
+            padding: 0.75rem 1rem !important;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(109, 76, 65, 0.25) !important;
+            border-color: var(--marron) !important;
+        }
+        
+        .btn-register {
+            background: var(--marron) !important;
+            color: white !important;
+            border: none !important;
+            padding: 0.75rem !important;
+            font-weight: 500 !important;
+            width: 100%;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-register:hover {
+            background: var(--noir) !important;
+            transform: translateY(-2px);
+        }
+        
+        .register-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--marron);
+        }
+        
+        .register-footer a {
+            color: var(--marron);
+            font-weight: 500;
+            text-decoration: underline;
+            transition: all 0.3s;
+        }
+        
+        .register-footer a:hover {
+            color: var(--noir);
+        }
+        
+        .alert-custom {
+            background: rgba(216, 196, 182, 0.3) !important;
+            border: 1px solid var(--taupe) !important;
+            color: var(--noir) !important;
+        }
+        
+        .toggle-password {
+            background: var(--taupe) !important;
+            border-color: var(--taupe) !important;
+            color: var(--noir) !important;
+        }
+
+
+        .register-card {
+    background: rgba(255, 249, 245, 0.98);
+    border-radius: 12px;
+    box-shadow: var(--ombre-douce);
+    border: 1px solid var(--taupe);
+    width: 100%;
+    max-width: 450px; /* smaller than 600px */
+    margin: 0 auto;
+    overflow: hidden;
+    font-size: 0.9rem; 
+    margin-top:0;/* slightly smaller text */
+}
+
+.register-body {
+    padding: 1.5rem; /* reduced from 2rem */
+}
+
+.form-control {
+    padding: 0.5rem 0.75rem !important; /* smaller padding */
+    font-size: 0.9rem !important;
+}
+
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="register-container">
+    <div class="container">
+        <div class="register-card">
+            <div class="register-header">
+                <h2><i class="bi bi-book-half"></i> Créer votre compte</h2>
+            </div>
+
+            <div class="register-body">
+                {% for flashError in app.flashes('error') %}
+                    <div class="alert alert-custom alert-dismissible fade show mb-4">
+                        {{ flashError }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+                
+                {{ form_start(registrationForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.email, {'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'exemple@domaine.com'
+                        }}) }}
+                        <div class="invalid-feedback small">
+                            Veuillez entrer une adresse email valide
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            {{ form_label(registrationForm.firstName, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(registrationForm.firstName, {'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Jean'
+                            }}) }}
+                            <div class="invalid-feedback small">
+                                Minimum 2 caractères
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_label(registrationForm.lastName, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(registrationForm.lastName, {'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Dupont'
+                            }}) }}
+                            <div class="invalid-feedback small">
+                                Minimum 2 caractères
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.birthDate, 'Date de naissance', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.birthDate, {'attr': {
+                            'class': 'form-control flatpickr',
+                            'placeholder': 'JJ/MM/AAAA'
+                        }}) }}
+                        <div class="invalid-feedback small">
+                            Vous devez avoir au moins 18 ans
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                        <div class="input-group">
+                            {{ form_widget(registrationForm.plainPassword, {'attr': {
+                                'class': 'form-control password-input',
+                                'placeholder': '••••••••'
+                            }}) }}
+                            <button class="btn btn-outline-secondary toggle-password" type="button">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <div class="invalid-feedback small">
+                            8 caractères min., majuscule, minuscule, chiffre
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-register">
+                        <i class="bi bi-person-plus me-1"></i> S'inscrire
+                    </button>
+                    
+                    <div class="register-footer">
+                        <p class="mb-0">Déjà inscrit? 
+                            <a href="{{ path('app_login') }}">Connectez-vous</a>
+                        </p>
+                    </div>
+                {{ form_end(registrationForm) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Validation Bootstrap
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-password').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const input = this.closest('.input-group').querySelector('.password-input');
+            const icon = this.querySelector('i');
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            icon.classList.toggle('bi-eye');
+            icon.classList.toggle('bi-eye-slash');
+        });
+    });
+
+    // Datepicker initialization
+    if (typeof flatpickr !== 'undefined') {
+        flatpickr('.flatpickr', {
+            dateFormat: 'd/m/Y',
+            maxDate: new Date().fp_incr(-18 * 365),
+            locale: 'fr',
+            allowInput: true
+        });
+    }
+});
+</script>
+{% endblock %}

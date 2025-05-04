@@ -1,0 +1,255 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Galerie d'Art Littéraire - Votre Panier{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --blanc-creme: #FFF9F5;
+            --beige: #F5E9E0;
+            --taupe: #D8C4B6;
+            --marron: #6D4C41;
+            --noir: #3E2723;
+            --ombre-douce: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        
+        body {
+            background-color: var(--blanc-creme);
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .cart-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--ombre-douce);
+            border: 1px solid var(--beige);
+        }
+        
+        h1 {
+            color: var(--noir);
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        h1:after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 2px;
+            background: var(--taupe);
+            margin: 0.5rem auto;
+        }
+        
+        .cart-subtitle {
+            text-align: center;
+            color: var(--marron);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 2rem;
+        }
+        
+        .table thead th {
+            background: var(--taupe);
+            color: white;
+            font-weight: 500;
+            padding: 0.8rem;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        
+        .table tbody td {
+            padding: 1rem 0.8rem;
+            border-bottom: 1px solid var(--beige);
+            vertical-align: middle;
+        }
+        
+        .book-cover {
+            width: 50px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid var(--beige);
+        }
+        
+        .quantity-input {
+            width: 50px;
+            padding: 0.3rem;
+            border: 1px solid var(--taupe);
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .btn-remove {
+            background: none;
+            border: none;
+            color: var(--marron);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        
+        .btn-remove:hover {
+            color: var(--noir);
+        }
+        
+        .cart-summary {
+            background: var(--beige);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-total {
+            font-weight: bold;
+            border-top: 1px solid var(--taupe);
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn-checkout {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--marron);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            margin-top: 1.5rem;
+            transition: background 0.2s;
+            text-align: center;
+        }
+        
+        .btn-checkout:hover {
+            background: var(--noir);
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        
+        .empty-cart-icon {
+            font-size: 3rem;
+            color: var(--taupe);
+            margin-bottom: 1rem;
+        }
+        
+        .btn-continue {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background: var(--taupe);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 1rem;
+            transition: background 0.2s;
+        }
+        
+        .btn-continue:hover {
+            background: var(--marron);
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="cart-container">
+    <h1>Votre Collection Littéraire</h1>
+    <p class="cart-subtitle">Les œuvres que vous avez sélectionnées</p>
+
+    {% if panier.items.count > 0 %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 60px;"></th>
+                    <th>Livre</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in panier.items %}
+                <tr>
+                    <td>
+                        {% if item.livre.image %}
+                            <img src="{{ asset('uploads/images/' ~ item.livre.image) }}" alt="{{ item.livre.titre }}" class="book-cover">
+                        {% else %}
+                            <div class="book-cover" style="background: var(--beige); display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 1.5rem;">📖</span>
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td>{{ item.livre.titre }}</td>
+                    <td>{{ item.livre.prix }} DT</td>
+                    <td>
+                        <form action="{{ path('app_panier_update', {'id': item.id}) }}" method="post" class="d-inline">
+                            <input type="number" 
+                                   name="quantity" 
+                                   class="quantity-input" 
+                                   value="{{ item.quantity }}" 
+                                   min="1"
+                                   onchange="this.form.submit()">
+                        </form>
+                    </td>
+                    <td>{{ (item.livre.prix * item.quantity)|number_format(2) }} DT</td>
+                    <td>
+                        <form action="{{ path('app_panier_remove', {'id': item.id}) }}" method="post" class="d-inline">
+                            <button type="submit" class="btn-remove">Retirer</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>Sous-total :</span>
+                <span>{{ total|number_format(2) }} DT</span>
+            </div>
+            <div class="summary-row">
+                <span>Frais de livraison :</span>
+                <span>7.00 DT</span>
+            </div>
+            <div class="summary-row summary-total">
+                <span>Total :</span>
+                <span>{{ (total + 7)|number_format(2) }} DT</span>
+            </div>
+            
+            <a href="#" class="btn-checkout">Procéder au paiement</a>
+        </div>
+    {% else %}
+        <div class="empty-cart">
+            <div class="empty-cart-icon">🛒</div>
+            <h3>Votre panier est vide</h3>
+            <p>Commencez à remplir votre bibliothèque</p>
+            <a href="{{ path('app_livres_index') }}" class="btn-continue">Parcourir les livres</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace admin: Détail d'un livre{% endblock %}
+
+{% block body %}
+<h1>Detail du livre</h1>
+<div class="row">
+<div class="col-3">
+<img src="{{livre.image}}">
+</div>
+<div class="col">
+<h2>{{livre.titre}}  ({{livre.prix}} DT)</h2></div>
+<h3>Editeur : {{livre.editeur}}</h3>
+<h3>Date Edition : {{livre.dateEdition |date("d-m-y")}}</h3>
+<h4>ISBN : {{livre.isbn}}</h4>
+<p>{{livre.resume}}</p>
+
+
+{% endblock %}
