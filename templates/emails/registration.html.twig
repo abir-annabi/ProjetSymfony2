@@ -1,0 +1,18 @@
+{# templates/emails/registration.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenue sur Kteby</title>
+</head>
+<body>
+    <h1>Bienvenue {{ user.firstName }} {{ user.lastName }} !</h1>
+    
+    <p>Merci pour votre inscription sur Kteby. Votre compte a été créé avec succès.</p>
+    
+    <p>Vous pouvez dès maintenant vous connecter à votre compte en utilisant l'adresse email : {{ user.email }}</p>
+    
+    <p>L'équipe Kteby</p>
+</body>
+</html>
